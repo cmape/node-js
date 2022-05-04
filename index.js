@@ -1,40 +1,32 @@
 const express = require('express')
+const mysql = require('mysql')
 const app = express()
+const connection = mysql.createConnection({
+  host:'bueqkcj8syiffafs6tbl-mysql.services.clever-cloud.com',
+  user:'u1hrcibqpqoroaxx',
+  password:'GCkyoSOLihhpklqt7hHR',
+  database:'bueqkcj8syiffafs6tbl'
+})
 
-let Id, Firstname, Lastname, Old;
+
 
 app.use(express.json());
 
-app.get('/', function (req, res) {
-    res.send('Hello World')
-})
-  
-app.get('/Id', function (req, res) {
-    res.send(Id)
-    console.log(Id);
-})
-
-app.get('/Firstname', function (req, res) {
-    res.send(Firstname)
-    console.log(Firstname);
-})
-app.get('/Lastname', function (req, res) {
-    res.send(Lastname)
-    console.log(Lastname);
-})
-
-app.get('/Old', function (req, res) {
-    res.send(Old)
-    console.log(Old);
-})
-
 app.post('/', function(request, response){
-  Id = request.body.Id
-  Firstname = request.body.Firstname
-  Lastname = request.body.Lastname
-  Old = request.body.Old
   console.log(request.body);      // your JSON
-  response.send('Exitoso');    // echo the result back
+   response.send(request.body);    // echo the result back
 });
 
+app.get('/', function (req, res) {
+  connection.connect((err)=>{
+    if(err) throw err
+    console.log('Succeful')
+  })
+  connection.query('SELECT * FROM `Tabla_Sueldos`',(err,rows)=>{
+    console.log(rows)
+  })
+  connection.end()
+})
+
 app.listen(3000)
+
